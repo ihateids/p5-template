@@ -1,93 +1,80 @@
-var ColorHelper = (function () {
-    function ColorHelper() {
+var Axes = (function () {
+    function Axes() {
     }
-    ColorHelper.getColorVector = function (c) {
-        return createVector(red(c), green(c), blue(c));
-    };
-    ColorHelper.rainbowColorBase = function () {
-        return [
-            color('red'),
-            color('orange'),
-            color('yellow'),
-            color('green'),
-            color(38, 58, 150),
-            color('indigo'),
-            color('violet')
-        ];
-    };
-    ColorHelper.getColorsArray = function (total, baseColorArray) {
-        var _this = this;
-        if (baseColorArray === void 0) { baseColorArray = null; }
-        if (baseColorArray == null) {
-            baseColorArray = ColorHelper.rainbowColorBase();
-        }
-        var rainbowColors = baseColorArray.map(function (x) { return _this.getColorVector(x); });
-        ;
-        var colours = new Array();
-        for (var i = 0; i < total; i++) {
-            var colorPosition = i / total;
-            var scaledColorPosition = colorPosition * (rainbowColors.length - 1);
-            var colorIndex = Math.floor(scaledColorPosition);
-            var colorPercentage = scaledColorPosition - colorIndex;
-            var nameColor = this.getColorByPercentage(rainbowColors[colorIndex], rainbowColors[colorIndex + 1], colorPercentage);
-            colours.push(color(nameColor.x, nameColor.y, nameColor.z));
-        }
-        return colours;
-    };
-    ColorHelper.getColorByPercentage = function (firstColor, secondColor, percentage) {
-        var firstColorCopy = firstColor.copy();
-        var secondColorCopy = secondColor.copy();
-        var deltaColor = secondColorCopy.sub(firstColorCopy);
-        var scaledDeltaColor = deltaColor.mult(percentage);
-        return firstColorCopy.add(scaledDeltaColor);
-    };
-    return ColorHelper;
-}());
-var PolygonHelper = (function () {
-    function PolygonHelper() {
-    }
-    PolygonHelper.draw = function (numberOfSides, width) {
+    Axes.draw = function (middleX, middleY, translateToMiddle, footer, axisColor, textSize, tickSize, tickStep, textShift) {
+        if (translateToMiddle === void 0) { translateToMiddle = true; }
+        if (footer === void 0) { footer = 'by Inspiro Club'; }
+        if (axisColor === void 0) { axisColor = 'lightgrey'; }
+        if (textSize === void 0) { textSize = 20; }
+        if (tickSize === void 0) { tickSize = 10; }
+        if (tickStep === void 0) { tickStep = 50; }
+        if (textShift === void 0) { textShift = 1.6; }
         push();
-        var angle = TWO_PI / numberOfSides;
-        var radius = width / 2;
-        beginShape();
-        for (var a = 0; a < TWO_PI; a += angle) {
-            var sx = cos(a) * radius;
-            var sy = sin(a) * radius;
-            vertex(sx, sy);
+        noStroke();
+        textFont('System', textSize);
+        stroke(axisColor);
+        fill(axisColor);
+        strokeWeight(1);
+        line(middleX, 0, middleX, height);
+        line(0, middleY, width, middleY);
+        translate(middleX, middleY);
+        for (var x = tickStep; x < width - middleX; x += tickStep) {
+            textAlign(CENTER, TOP);
+            line(x, -tickSize, x, +tickSize);
+            text(x, x, tickSize * textShift);
+            textAlign(CENTER, BOTTOM);
+            line(-x, -tickSize, -x, tickSize);
+            text(-x, -x, -tickSize * textShift);
+            push();
+            for (var y = tickStep; y < height - middleY; y += tickStep) {
+                strokeWeight(2);
+                point(x, y);
+                point(-x, y);
+                point(x, -y);
+                point(-x, -y);
+            }
+            pop();
         }
-        endShape(CLOSE);
+        for (var y = tickStep; y < height - middleY; y += tickStep) {
+            textAlign(LEFT, CENTER);
+            line(-tickSize, -y, +tickSize, -y);
+            text(y, tickSize * textShift, y + textSize);
+            textAlign(RIGHT, CENTER);
+            line(-tickSize, y, tickSize, y);
+            text(-y, -tickSize * textShift, -y);
+        }
+        textAlign(CENTER, TOP);
+        if (middleX) {
+            text('X', width - middleX - tickSize * textShift - textSize / 2, -tickSize * textShift * textShift - textSize / 2);
+        }
+        textAlign(CENTER, TOP);
+        if (middleY) {
+            text('Y', +tickSize * textShift + textSize / 2, -middleY + textSize / 2);
+        }
+        textAlign(CENTER, BOTTOM);
+        noStroke();
+        text(footer, width - middleX - textWidth(footer), height - middleY - textSize);
         pop();
+        if (translateToMiddle) {
+            translate(middleX, middleY);
+        }
     };
-    return PolygonHelper;
+    return Axes;
 }());
-var numberOfShapesControl;
+function preload() {
+}
 function setup() {
     console.log("🚀 - Setup initialized - P5 is running");
     createCanvas(windowWidth, windowHeight);
-    rectMode(CENTER).noFill().frameRate(30);
-    numberOfShapesControl = createSlider(1, 30, 15, 1).position(10, 10).style("width", "100px");
 }
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
 function draw() {
-    background(0);
-    translate(width / 2, height / 2);
-    var numberOfShapes = numberOfShapesControl.value();
-    var colours = ColorHelper.getColorsArray(numberOfShapes);
-    var speed = (frameCount / (numberOfShapes * 30)) * 2;
-    for (var i = 0; i < numberOfShapes; i++) {
-        push();
-        var lineWidth = 8;
-        var spin = speed * (numberOfShapes - i);
-        var numberOfSides = 3 + i;
-        var width_1 = 40 * i;
-        strokeWeight(lineWidth);
-        stroke(colours[i]);
-        rotate(spin);
-        PolygonHelper.draw(numberOfSides, width_1);
-        pop();
-    }
+    Axes.draw(0, 0, true);
+    textSize(40);
+    fill(0, 0, 255, 5);
+    textAlign(CENTER);
+    text("Welcome to P5js 🚀", 1000, 500);
 }
-//# sourceMappingURL=../sketch/sketch/build.js.map
+//# sourceMappingURL=build.js.map
