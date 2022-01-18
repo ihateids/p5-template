@@ -19,7 +19,7 @@ function draw() {
   Axes.draw(0, 0, true); // true - translate to middle of axes
   //Axes.draw(windowWidth / 2, windowHeight / 2, false); // true - do not translate to middle of axes
   textSize(40);
-  fill(0,0,255,5);
+  fill(0, 0, 255, 5);
   textAlign(CENTER);
-  text("Welcome to P5js 🚀", 1000,500);
+  text("Welcome to P5js 🚀", width / 2, height / 2);
 }
