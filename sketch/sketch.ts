@@ -1,5 +1,3 @@
-
-
 let sound: p5.SoundFile; // to use p5 sound
 declare function loadSound(path: string): p5.SoundFile; // a hack to get loadSound working with typescript
 declare let ml5: any; // to use ml5 (no ml5 types available)
