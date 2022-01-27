@@ -3,16 +3,20 @@
 
 This project will quickly get you something working in [p5.js](https://p5js.org/) and [typescript](https://www.typescriptlang.org/).
 
+It is based very much on template Gaweph/p5-typescript-starter (Thank you Gaweph).
+
+It is showcasing how to include libraries like clmtrackr, ml5 and qr-code generator in typescript, while using global mode.
+
 ## Demo
 
-**[Click here for Demo](https://ihateids.github.io/p5-template/)**
+**[Click here for Demo](https://ihateids.github.io/p5-typescript-template/)**
 
 ## Getting Started
 
 ### Installing
 
 ```
-git clone https://github.com/ihateids/p5-template.git
+git clone https://github.com/ihateids/p5-typescript-template.git
 ```
 
 ```
